@@ -8,12 +8,13 @@ var dice = [1, 1, 1, 1 ,1];
 var diceSelected = [false,false,false,false,false];
 var p1Turn = true;
 var turnCount = 1;
-var p1score = [];
-var p2score = [];
+var p1score = [,,,,,,0,0,,,,,,,0];
+var p2score = [,,,,,,0,0,,,,,,,0];
 var tempScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 const diceElement = [];
 const rollButton = document.getElementById("rollButton");
+const turnElement = document.getElementById("turn");
 rollButton.addEventListener('click', rollDice);
 
 for (let i = 0; i < 5; i++) {
@@ -40,35 +41,23 @@ function rollDice() {
     }
     rollCount--;
     rollButton.innerHTML = "주사위 굴리기 (" + rollCount + "/3)"
-    showTempScore()
-    checkTurn();
+    showTempScore();
+    setListener();
   }
 }
 
 function setListener(){
-  if (p1Turn) {
-    for(let i = 0; i < 6; i++) {
-      if (p1Score == undefined) {
-        p1Element[i].addEventListener('click', function() {setScore(i);});
-      }
-      p2Element[i].removeEventListener('click', function() {setScore(i);});
-    }
-    for(let i = 8; i < 15; i++) {
-      if (p1Score == undefined) {
+  if (p1Turn == true) {
+    for(let i = 0; i < 15; i++) {
+      if (p1score[i] == undefined) {
         p1Element[i].addEventListener('click', function() {setScore(i);});
       }
       p2Element[i].removeEventListener('click', function() {setScore(i);});
     }
   }
   else {
-    for(let i = 0; i < 6; i++) {
-      if (p2Score == undefined) {
-        p2Element[i].addEventListener('click', function() {setScore(i);});
-      }
-      p1Element[i].removeEventListener('click', function() {setScore(i);});
-    }
-    for(let i = 8; i < 15; i++) {
-      if (p2Score == undefined) {
+    for(let i = 0; i < 15; i++) {
+      if (p2score[i] == undefined) {
         p2Element[i].addEventListener('click', function() {setScore(i);});
       }
       p1Element[i].removeEventListener('click', function() {setScore(i);});
@@ -79,11 +68,24 @@ function setListener(){
 function overTurn() {
   p1Turn = !p1Turn;
   tempScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  for (let i = 0; i < 5; i++) {
+    if (diceSelected[i])
+    {
+      selectDice(i);
+    }
+  }
   rollCount = 3;
-  var diceSelected = [false,false,false,false,false];
-  checkTurn();
+  rollButton.innerHTML = "주사위 굴리기 (" + rollCount + "/3)"
+  setListener();
+  if (p1Turn){
+    turnElement.innerHTML = "P1's Turn";
+  }
+  else {
+    turnElement.innerHTML = "P2's Turn";
+  }
 }
 
+//주사위의 선택 여부에 따라 변수의 값과 class를 바꾸는 함수
 function selectDice(dice_id){
   if(rollCount < 3){
     diceSelected[dice_id] = !diceSelected[dice_id];
@@ -98,11 +100,11 @@ function selectDice(dice_id){
 }
 
 function setScore(score_id) {
-  if (p1Turn)
+  if (p1Turn == true)
   {
     p1score[score_id] = tempScore[score_id];
     p1Element[score_id].removeEventListener("click", function(){
-      setScore(i)
+      setScore(i);
     });
     updateScore(score_id);
   }
@@ -110,15 +112,14 @@ function setScore(score_id) {
   {
     p2score[score_id] = tempScore[score_id];
     p2Element[score_id].removeEventListener("click", function(){
-      setScore(i)
+      setScore(i);
     });
     updateScore(score_id);
   }
-  overTurn();
 }
 
 function updateScore(score_id){
-  if(p1Turn){
+  if(p1Turn == true){
     p1score[6] = 0;
     p1score[7] = 0;
     for (let i = 0; i < 6; i++) {
@@ -137,7 +138,9 @@ function updateScore(score_id){
       }
     }
     for (let i = 0; i < 15; i++) {
-      p1Element[i].innerHTML = "";
+      if(p1score[i] == undefined){
+        p1Element[i].innerHTML = "";
+      }
     }
     p1Element[score_id].innerHTML = p1score[score_id];
     p1Element[score_id].className += " scoreSet";
@@ -165,7 +168,9 @@ function updateScore(score_id){
       }
     }
     for (let i = 0; i < 15; i++) {
-      p2Element[i].innerHTML = "";
+      if(p2score[i] == undefined){
+        p2Element[i].innerHTML = "";
+      }
     }
     p2Element[score_id].innerHTML = p2score[score_id];
     p2Element[score_id].className += " scoreSet";
@@ -173,12 +178,12 @@ function updateScore(score_id){
     p2Element[7].innerHTML = p2score[7];
     p2Element[14].innerHTML = p2score[14];
   }
-  
+  overTurn();
 }
 //임시로 계산된 점수를 보여주는 함수
 function showTempScore() {
   calcScore()
-  if (p1Turn) {
+  if (p1Turn == true) {
     for (let i = 0; i < 6; i++) {
       if(p1score[i] == undefined){
         p1Element[i].innerHTML = tempScore[i];

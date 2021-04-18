@@ -27,12 +27,16 @@ body{
   text-align: center;
 }
 
+#turn {
+  font-size: large;
+}
+
 .scoreBoard th, td {
   border-color: black;
   border-style: solid;
   border-width: 1px;
   font-family: Arial, sans-serif;
-  font-size: 20px;
+  font-size: 14px;
   padding: 10px 5px;
   word-break: normal;
   background-color: #FEFCEF;
