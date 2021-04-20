@@ -19,7 +19,7 @@ rollButton.addEventListener('click', rollDice);
 
 for (let i = 0; i < 5; i++) {
   diceElement[i] = document.getElementById("Dice"+i);
-  diceElement[i].addEventListener('click', function(){selectDice(i);});
+  diceElement[i].addEventListener('click', function() {selectDice(i);});
   diceElement[i].innerHTML = dice[i];
 }
 const p1Element = [];
@@ -30,6 +30,7 @@ for (let i = 0; i < 15; i++) {
 }
 // console.log(dice);
 
+setListener();
 
 function rollDice() {
   if (rollCount > 0) {
@@ -42,7 +43,6 @@ function rollDice() {
     rollCount--;
     rollButton.innerHTML = "주사위 굴리기 (" + rollCount + "/3)"
     showTempScore();
-    setListener();
   }
 }
 
@@ -50,17 +50,17 @@ function setListener(){
   if (p1Turn == true) {
     for(let i = 0; i < 15; i++) {
       if (p1score[i] == undefined) {
-        p1Element[i].addEventListener('click', function() {setScore(i);});
+        p1Element[i].addEventListener('click', setScore);
       }
-      p2Element[i].removeEventListener('click', function() {setScore(i);});
+      p2Element[i].removeEventListener('click', setScore);
     }
   }
   else {
     for(let i = 0; i < 15; i++) {
       if (p2score[i] == undefined) {
-        p2Element[i].addEventListener('click', function() {setScore(i);});
+        p2Element[i].addEventListener('click', setScore);
       }
-      p1Element[i].removeEventListener('click', function() {setScore(i);});
+      p1Element[i].removeEventListener('click', setScore);
     }
   }
 }
@@ -83,6 +83,7 @@ function overTurn() {
   else {
     turnElement.innerHTML = "P2's Turn";
   }
+  setListener();
 }
 
 //주사위의 선택 여부에 따라 변수의 값과 class를 바꾸는 함수
@@ -99,21 +100,20 @@ function selectDice(dice_id){
   }
 }
 
-function setScore(score_id) {
+function setScore(event) {
+  var score_id = event.target.id.split('-');
+  score_id = score_id[0];
+  console.log(p1Turn, score_id);
   if (p1Turn == true)
   {
     p1score[score_id] = tempScore[score_id];
-    p1Element[score_id].removeEventListener("click", function(){
-      setScore(i);
-    });
+    p1Element[score_id].removeEventListener("click", setScore);
     updateScore(score_id);
   }
   else
   {
     p2score[score_id] = tempScore[score_id];
-    p2Element[score_id].removeEventListener("click", function(){
-      setScore(i);
-    });
+    p2Element[score_id].removeEventListener("click", setScore);
     updateScore(score_id);
   }
 }
