@@ -36,15 +36,16 @@ body{
   border-style: solid;
   border-width: 1px;
   font-family: Arial, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   padding: 10px 5px;
   word-break: normal;
   background-color: #FEFCEF;
 }
 
 .scoreBoard-user {
-  text-align: center;
+  text-align: right;
   color: gray;
+  font-size: 12px;
 }
 
 .scoreBoard-categories {
@@ -52,7 +53,9 @@ body{
 }
 
 .scoreSet{
+  text-align: center;
   color: black;
+  font-size: 16px;
 }
 
 .score_img {
@@ -86,6 +89,7 @@ body{
   text-align: center;
   margin: 30px;
   color: black;
+  transition-duration: 0.3s;
 }
 
 .SelectedDice{
@@ -98,7 +102,7 @@ body{
   text-align: center;
   margin: 30px;
   color: white;
-
+  transition-duration: 0.3s;
 }
 
 .RollButtonArea{

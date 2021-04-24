@@ -4,9 +4,9 @@
 // diceElement.innerHTML = 1;
 
 var rollCount = 3;
-var dice = [1, 1, 1, 1 ,1];
+var dice = [0, 0, 0, 0 ,0];
 var diceSelected = [false,false,false,false,false];
-var p1Turn = true;
+var p1Turn = false;
 var turnCount = 1;
 var p1score = [,,,,,,0,0,,,,,,,0];
 var p2score = [,,,,,,0,0,,,,,,,0];
@@ -30,13 +30,15 @@ for (let i = 0; i < 15; i++) {
 }
 // console.log(dice);
 
-setListener();
+//일부러 P2의 순서로 초기화 한 뒤 p1의 순서로 바꾸면서 게임시작
+overTurn();
 
 function rollDice() {
   if (rollCount > 0) {
     for (let i = 0; i < 5; i++) {
       if (!diceSelected[i]) {
         dice[i] = getRandomInt(1, 7);
+        diceElement[i].style.transform = "rotate(" + (getRandomInt(-60, 61)) + "deg)"
       }
       diceElement[i].innerHTML = dice[i];
     }
@@ -73,6 +75,7 @@ function overTurn() {
     {
       selectDice(i);
     }
+    diceElement[i].style.transform = "rotate(0deg)";
   }
   rollCount = 3;
   rollButton.innerHTML = "주사위 굴리기 (" + rollCount + "/3)"
@@ -92,10 +95,12 @@ function selectDice(dice_id){
     diceSelected[dice_id] = !diceSelected[dice_id];
     if (diceSelected[dice_id]) {
       diceElement[dice_id].className="SelectedDice";
+      diceElement[dice_id].style.transform = "rotate(0deg)";
     }
     else
     {
       diceElement[dice_id].className="Dice";
+      diceElement[dice_id].style.transform = "rotate(" + getRandomInt(-60, 61) + "deg)";
     }  
   }
 }
