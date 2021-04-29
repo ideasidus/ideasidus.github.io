@@ -73,6 +73,17 @@ function overTurn() {
   else {
     turnElement.innerHTML = "P2's Turn";
   }
+
+  for (let i = 0; i < p1Element.length; i++) {
+    if (p1Turn){
+      p1Element[i].style.backgroundColor = "lightgreen";
+      p2Element[i].style.backgroundColor = "#FEFCEF"
+    }
+    else {
+      p1Element[i].style.backgroundColor = "#FEFCEF";
+      p2Element[i].style.backgroundColor = "lightgreen"
+    }
+  }
   setListener();
   checkEnd();
 }
