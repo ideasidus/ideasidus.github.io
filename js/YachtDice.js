@@ -14,7 +14,6 @@ const resetArea = document.getElementById("resetArea")
 rollButton.addEventListener('click', rollDice);
 
 var resetButton = document.createElement("button");
-resetButton.textContent = "새 게임 시작";
 resetButton.className = "btn btn-primary";
 resetButton.style.width = "30%";
 resetButton.style.height = "64px";
@@ -82,7 +81,18 @@ function checkEnd() {
   turn++;
   if(turn > 24)
   {
-    alert("Game End");
+    if(p1score[14] > p2score[14])
+    {
+      resetButton.textContent = "[Player 1] 승리! 새 게임 시작";
+    }
+    else if(p1score[14] < p2score[14])
+    {
+      resetButton.textContent = "[Player 2] 승리! 새 게임 시작";
+    }
+    else
+    {
+      resetButton.textContent = "비겼습니다! 새 게임 시작";
+    }
     resetArea.appendChild(resetButton);
   }
 }
