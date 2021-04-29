@@ -1,21 +1,24 @@
-
-
-// diceElement = document.getElementById("Dice1");
-// diceElement.innerHTML = 1;
-
 var rollCount = 3;
 var dice = [0, 0, 0, 0 ,0];
 var diceSelected = [false,false,false,false,false];
 var p1Turn = false;
-var turnCount = 1;
 var p1score = [,,,,,,0,0,,,,,,,0];
 var p2score = [,,,,,,0,0,,,,,,,0];
 var tempScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var turn = 0;
 
 const diceElement = [];
 const rollButton = document.getElementById("rollButton");
 const turnElement = document.getElementById("turn");
+const resetArea = document.getElementById("resetArea")
 rollButton.addEventListener('click', rollDice);
+
+var resetButton = document.createElement("button");
+resetButton.textContent = "새 게임 시작";
+resetButton.className = "btn btn-primary";
+resetButton.style.width = "30%";
+resetButton.style.height = "64px";
+resetButton.addEventListener('click', resetGame);
 
 for (let i = 0; i < 5; i++) {
   diceElement[i] = document.getElementById("Dice"+i);
@@ -32,21 +35,6 @@ for (let i = 0; i < 15; i++) {
 
 //일부러 P2의 순서로 초기화 한 뒤 p1의 순서로 바꾸면서 게임시작
 overTurn();
-
-function rollDice() {
-  if (rollCount > 0) {
-    for (let i = 0; i < 5; i++) {
-      if (!diceSelected[i]) {
-        dice[i] = getRandomInt(1, 7);
-        diceElement[i].style.transform = "rotate(" + (getRandomInt(-60, 61)) + "deg)"
-      }
-      diceElement[i].innerHTML = dice[i];
-    }
-    rollCount--;
-    rollButton.innerHTML = "주사위 굴리기 (" + rollCount + "/3)"
-    showTempScore();
-  }
-}
 
 function setListener(){
   if (p1Turn == true) {
@@ -87,6 +75,63 @@ function overTurn() {
     turnElement.innerHTML = "P2's Turn";
   }
   setListener();
+  checkEnd();
+}
+
+function checkEnd() {
+  turn++;
+  if(turn > 24)
+  {
+    alert("Game End");
+    resetArea.appendChild(resetButton);
+  }
+}
+
+function resetGame() {
+  rollCount = 3;
+  dice = [0, 0, 0, 0 ,0];
+  diceSelected = [false,false,false,false,false];
+  p1Turn = false;
+  p1score = [,,,,,,0,0,,,,,,,0];
+  p2score = [,,,,,,0,0,,,,,,,0];
+  tempScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  turn = 0;
+
+  resetArea.removeChild(resetButton);
+
+
+  for (let i = 0; i < 15; i++) {
+  p1Element[i].innerHTML = "";
+  p2Element[i].innerHTML = "";
+  p1Element[i].className = "scoreBoard-user p1";
+  p2Element[i].className = "scoreBoard-user p2";
+  }
+  p1Element[6].innerHTML = "0/63";
+  p2Element[6].innerHTML = "0/63";
+
+  p1Element[6].className += " scoreSet";
+  p1Element[7].className += " scoreSet";
+  p1Element[14].className += " scoreSet";
+  p2Element[6].className += " scoreSet";
+  p2Element[7].className += " scoreSet";
+  p2Element[14].className += " scoreSet";
+
+  overTurn();
+}
+
+function rollDice() {
+  if (rollCount > 0) {
+    for (let i = 0; i < 5; i++) {
+      if (!diceSelected[i]) {
+        dice[i] = getRandomInt(1, 7);
+        diceElement[i].style.transform = "rotate(" + (getRandomInt(-60, 61)) + "deg)"
+      }
+      diceElement[i].innerHTML = dice[i];
+    }
+    rollCount--;
+    rollButton.innerHTML = "주사위 굴리기 (" + rollCount + "/3)"
+    showTempScore();
+  }
 }
 
 //주사위의 선택 여부에 따라 변수의 값과 class를 바꾸는 함수
@@ -212,7 +257,6 @@ function showTempScore() {
       }
     }
   }
-  
 }
 //점수 계산하는 함수 tempScore에 그 값을 저장함.
 function calcScore() {
